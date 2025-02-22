@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Browser</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&amp;display=swap" rel="stylesheet">
+    <style>
+        .icon {
+            filter: invert(100%);
+        }
+        body {
+            background-image: url("static/background/mountans.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .file-explorer {
+            margin: 20px;
+            width: 90%;
+            max-width: 1200px;
+            background-color: #0000004f;
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .path {
+            padding: 15px;
+            border-radius: 20px;
+            width: 100%;
+            text-align: center;
+            color: rgb(255, 255, 255);
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .submit {
+            color: white;
+            background-color: greenyellow;
+            padding: 12px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .container-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            width: 100%;
+            padding: 10px;
+            justify-content: center;
+        }
+
+        .container {
+            background-color: rgb(45, 57, 61);
+            border-radius: 15px;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .container:hover {
+            transform: scale(1.05);
+            background-color: rgb(0, 112, 146);
+        }
+        .container:active {
+            transform: scale(.95);
+            background-color: rgb(17, 80, 116);
+        }
+
+        a {
+            text-decoration: none;
+            color: rgb(255, 255, 255);
+            display: block;
+        }
+
+        img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="file-explorer">
+        <div class="path">
+            <h2>{{subpath}}</h2>
+        </div>
+        <div class="container-grid">
+            <div class="container">
+                <a href="new?path={{subpath}}">
+                    <img class="icon" src="static/icons/create.png" alt="file icon">
+                    <p>New</p>
+                </a>
+            </div>
+            {% for file in files %}
+            <div class="container">
+                <a href="path?path={{file.path}}&by={{by}}">
+                    <img class="icon" src="static/{{file.image}}" alt="file icon">
+                    <p>{{file.name}}</p>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
