@@ -7,29 +7,33 @@ app = Flask(__name__, "/static","static")
 def render_path():
     root = "/config/workspace/dockermanager"
     subpath = request.args.get("path", root)  # Use request.args for GET requests
+    mode = request.args.get("mode", "view")
     by = request.args.get("by","")
     if "/.." in subpath or not root in subpath:
         return "canot acsess files beond threshold"
     print(subpath)  # Debugging
-
-    if os.path.isdir(subpath):
-        fullpath = subpath
-        filelist = os.listdir(subpath)
-        if subpath != root:
-            out = [{"path": os.path.dirname(fullpath), "name": "Back","image":"icons/back.png"}]
-        else:
-            out = []
-        for item in filelist:
-            fpath = os.path.join(fullpath, item)  # Correct path joining
-            if os.path.isdir(fpath):
-                image = "icons/folder.png"
+    if mode == "view":
+        if os.path.isdir(subpath):
+            fullpath = subpath
+            filelist = os.listdir(subpath)
+            if subpath != root:
+                out = [{"path": os.path.dirname(fullpath), "name": "Back","image":"icons/back.png"}]
             else:
-                image = "icons/file.png"
-            out.append({"path": fpath, "name": item,"image":image})
+                out = []
+            for item in filelist:
+                fpath = os.path.join(fullpath, item)  # Correct path joining
+                if os.path.isdir(fpath):
+                    image = "icons/folder.png"
+                else:
+                    image = "icons/file.png"
+                out.append({"path": fpath, "name": item,"image":image})
+            
+            return render_template("file.html", files=out,subpath=subpath,by=by,mode="view")
+        else:
+            return "Invalid path", 400
+    elif mode == "delete":
+        return Exception
         
-        return render_template("file.html", files=out,subpath=subpath,by=by)
-    else:
-        return "Invalid path", 400
 
 @app.route('/new', methods=['GET'])
 def new():
